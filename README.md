@@ -7,7 +7,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 + [Dark mode shadcn](https://ui.shadcn.com/docs/dark-mode/next)
 + [prisma](https://www.prisma.io/)
 + [Best practice for instantiating Prisma Client with Next.js](https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-dev-practices)
-
++ [uploadthing](https://uploadthing.com/)
 
 #### Prisma CMD
 ``` shell
