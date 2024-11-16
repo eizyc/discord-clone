@@ -4,6 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Useful Link
 + [clerk](https://clerk.com/)
++ [Dark mode shadcn](https://ui.shadcn.com/docs/dark-mode/next)
 
 
 
