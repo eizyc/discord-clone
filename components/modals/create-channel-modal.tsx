@@ -1,10 +1,12 @@
 "use client";
+
 import qs from "query-string";
 import axios from "axios";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ChannelType } from "@prisma/client";
+
 import {
   Dialog,
   DialogContent,
@@ -31,6 +33,8 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import { useEffect } from "react";
+
 const formSchema = z.object({
   name: z.string().min(1, {
     message: "Channel name is required."
@@ -42,19 +46,33 @@ const formSchema = z.object({
   ),
   type: z.nativeEnum(ChannelType)
 });
+
 export const CreateChannelModal = () => {
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
   const params = useParams();
+
   const isModalOpen = isOpen && type === "createChannel";
+  const { channelType } = data;
+ 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT,
+      type: channelType || ChannelType.TEXT,
     }
   });
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue("type", channelType);
+    } else {
+      form.setValue("type", ChannelType.TEXT);
+    }
+  }, [channelType, form]);
+
   const isLoading = form.formState.isSubmitting;
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const url = qs.stringifyUrl({
@@ -64,6 +82,7 @@ export const CreateChannelModal = () => {
         }
       });
       await axios.post(url, values);
+
       form.reset();
       router.refresh();
       onClose();
@@ -71,10 +90,12 @@ export const CreateChannelModal = () => {
       console.log(error);
     }
   }
+
   const handleClose = () => {
     form.reset();
     onClose();
   }
+
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
