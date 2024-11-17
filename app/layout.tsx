@@ -2,10 +2,10 @@ import "./globals.css";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
-
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { ModalProvider } from '@/components/providers/modal-provider'
+import { ModalProvider } from "@/components/providers/modal-provider";
+import { SocketProvider } from "@/components/providers/socket-provider";
 import { cn } from "@/lib/utils";
 
 const geistSans = localFont({
@@ -33,20 +33,22 @@ export default function RootLayout({
     <ClerkProvider afterSignOutUrl="/">
       <html lang="en" suppressHydrationWarning>
         <body
-          className={
-            cn(
-              geistSans.variable,
-              geistMono.variable,
-              "antialiased bg-white dark:bg-[#313338]"
-            )}>
+          className={cn(
+            geistSans.variable,
+            geistMono.variable,
+            "antialiased bg-white dark:bg-[#313338]"
+          )}
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem={false}
             storageKey="discord-theme"
           >
-            <ModalProvider />
-            {children}
+            <SocketProvider>
+              <ModalProvider />
+              {children}
+            </SocketProvider>
           </ThemeProvider>
         </body>
       </html>
