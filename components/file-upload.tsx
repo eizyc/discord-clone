@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { FileIcon, X } from "lucide-react";
 import Image from "next/image";
 
@@ -16,7 +16,7 @@ export const FileUpload = ({
   value,
   endpoint
 }: FileUploadProps) => {
-  const fileType = value?.split(".").pop();
+  const [ fileType, setFileType ] = useState<string>("");
 
   if (value && fileType !== "pdf") {
     return (
@@ -46,7 +46,7 @@ export const FileUpload = ({
           href={value}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline"
+          className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline break-all"
         >
           {value}
         </a>
@@ -66,6 +66,7 @@ export const FileUpload = ({
       endpoint={endpoint}
       onClientUploadComplete={(res) => {
         onChange(res?.[0].url);
+        setFileType(res?.[0].type.split("/")[1]);
       }}
       onUploadError={(error: Error) => {
         console.log(error);
