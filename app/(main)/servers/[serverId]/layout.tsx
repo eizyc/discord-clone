@@ -3,12 +3,17 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { currentProfile } from "@/lib/current-profile";
 import { ServerSidebar } from "@/components/server/server-sidebar";
+
+type Params = Promise<{
+  serverId: string;
+}>;
+
 const ServerIdLayout = async ({
   children,
   params,
 }: {
-  children: React.ReactNode;
-  params: { serverId: string };
+  children: React.ReactNode
+  params: Params
 }) => {
   const { serverId } = await params
   const { redirectToSignIn } = await auth();

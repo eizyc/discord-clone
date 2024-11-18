@@ -2,12 +2,14 @@ import { NextResponse } from "next/server";
 import { MemberRole } from "@prisma/client";
 import { currentProfile } from "@/lib/current-profile";
 import { db } from "@/lib/db";
-export async function DELETE(
-  req: Request,
-  { params }: { params: { channelId: string } }
-) {
+
+type Params = Promise<{
+  channelId: string;
+  serverId: string;
+}>;
+export async function DELETE(req: Request, { params }: { params: Params }) {
   try {
-    const { channelId } = await params
+    const { channelId } = await params;
     const profile = await currentProfile();
     const { searchParams } = new URL(req.url);
     const serverId = searchParams.get("serverId");
@@ -28,9 +30,9 @@ export async function DELETE(
             profileId: profile.id,
             role: {
               in: [MemberRole.ADMIN, MemberRole.MODERATOR],
-            }
-          }
-        }
+            },
+          },
+        },
       },
       data: {
         channels: {
@@ -38,10 +40,10 @@ export async function DELETE(
             id: channelId,
             name: {
               not: "general",
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     });
     return NextResponse.json(server);
   } catch (error) {
@@ -51,10 +53,16 @@ export async function DELETE(
 }
 export async function PATCH(
   req: Request,
-  { params }: { params: { channelId: string } }
+  {
+    params,
+  }: {
+    params: Promise<{
+      channelId: string;
+    }>;
+  }
 ) {
   try {
-    const { channelId } = await params
+    const { channelId } = await params;
     const profile = await currentProfile();
     const { name, type } = await req.json();
     const { searchParams } = new URL(req.url);
@@ -79,9 +87,9 @@ export async function PATCH(
             profileId: profile.id,
             role: {
               in: [MemberRole.ADMIN, MemberRole.MODERATOR],
-            }
-          }
-        }
+            },
+          },
+        },
       },
       data: {
         channels: {
@@ -95,10 +103,10 @@ export async function PATCH(
             data: {
               name,
               type,
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     });
     return NextResponse.json(server);
   } catch (error) {

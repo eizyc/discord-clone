@@ -8,18 +8,15 @@ import { ChatInput } from "@/components/chat/chat-input";
 import { ChatMessages } from "@/components/chat/chat-messages";
 import { MediaRoom } from "@/components/media-room";
 
-interface ChannelIdPageProps {
-  params: {
-    serverId: string;
-    channelId: string;
-  }
-}
-const ChannelIdPage = async ({
-  params
-}: ChannelIdPageProps) => {
+type Params = Promise<{
+  serverId: string;
+  channelId: string;
+}>;
+
+const ChannelIdPage = async ({ params }: { params: Params }) => {
   const { redirectToSignIn } = await auth();
   const profile = await currentProfile();
-  const { channelId, serverId } = await params
+  const { channelId, serverId } = await params;
   if (!profile) {
     return redirectToSignIn();
   }
@@ -32,12 +29,12 @@ const ChannelIdPage = async ({
     where: {
       serverId: serverId,
       profileId: profile.id,
-    }
+    },
   });
   if (!channel || !member) {
     redirect("/");
   }
-  return ( 
+  return (
     <div className="bg-white dark:bg-[#313338] flex flex-col h-full">
       <ChatHeader
         name={channel.name}
@@ -72,21 +69,13 @@ const ChannelIdPage = async ({
         </>
       )}
       {channel.type === ChannelType.AUDIO && (
-        <MediaRoom
-          chatId={channel.id}
-          video={false}
-          audio={true}
-        />
+        <MediaRoom chatId={channel.id} video={false} audio={true} />
       )}
       {channel.type === ChannelType.VIDEO && (
-        <MediaRoom
-          chatId={channel.id}
-          video={true}
-          audio={true}
-        />
+        <MediaRoom chatId={channel.id} video={true} audio={true} />
       )}
     </div>
-   );
-}
+  );
+};
 
 export default ChannelIdPage;

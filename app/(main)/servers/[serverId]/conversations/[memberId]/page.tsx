@@ -8,23 +8,26 @@ import { ChatMessages } from "@/components/chat/chat-messages";
 import { ChatInput } from "@/components/chat/chat-input";
 import { MediaRoom } from "@/components/media-room";
 
-interface MemberIdPageProps {
-  params: {
-    memberId: string;
-    serverId: string;
-  },
-  searchParams: {
-    video?: boolean;
-  }
-}
+type Params = Promise<{
+  memberId: string;
+  serverId: string;
+}>;
 
-const MemberIdPage = async ({ 
+type SearchParams = Promise<{
+  video?: boolean;
+}>;
+
+const MemberIdPage = async ({
   params,
   searchParams,
- }: MemberIdPageProps) => {
+}: {
+  params: Params;
+  searchParams: SearchParams;
+}) => {
   const { redirectToSignIn } = await auth();
   const profile = await currentProfile();
   const { serverId, memberId } = await params;
+  const { video } = await searchParams;
   if (!profile) {
     return redirectToSignIn();
   }
@@ -58,14 +61,10 @@ const MemberIdPage = async ({
         serverId={serverId}
         type="conversation"
       />
-      {searchParams.video && (
-        <MediaRoom
-          chatId={conversation.id}
-          video={true}
-          audio={true}
-        />
+      {video && (
+        <MediaRoom chatId={conversation.id} video={true} audio={true} />
       )}
-      {!searchParams.video && (
+      {!video && (
         <>
           <ChatMessages
             member={currentMember}
