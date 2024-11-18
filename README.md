@@ -9,6 +9,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 + [Best practice for instantiating Prisma Client with Next.js](https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-dev-practices)
 + [uploadthing](https://uploadthing.com/)
 + [configuring-tailwind-css & uploadthing](https://docs.uploadthing.com/concepts/theming#configuring-tailwind-css)
++ [socket.io](https://socket.io/how-to/use-with-nextjs)
 
 #### Prisma CMD
 ``` shell
